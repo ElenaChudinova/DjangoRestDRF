@@ -1,10 +1,13 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from rest_framework import serializers
+
+from materials.models import Course, Lesson
 
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(
+    email = models.EmailField(max_length=50,
         unique=True, verbose_name="Почта", help_text="Укажите почту"
     )
     phone = models.CharField(
@@ -35,3 +38,42 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+    objects = UserManager()
+
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
+    def __str__(self):
+        return self.email
+
+
+
+class Payment(models.Model):
+    CASH = "НАЛИЧНЫЕ"
+    BANK_TRANSFER = "ПЕРЕВОД НА СЧЕТ"
+    PAYMENT_METHOD = (
+        (CASH, "НАЛИЧНЫЕ"),
+        (BANK_TRANSFER, "ПЕРЕВОД НА СЧЕТ"),
+    )
+
+    email = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    date_payment = models.DateTimeField(editable=False,
+        auto_now_add=True,
+        verbose_name="Дата оплаты",
+        null=True,
+        blank=True,)
+    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
+    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True)
+    payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
+    payment_method = models.CharField(max_length=15, choices=PAYMENT_METHOD, default=CASH, verbose_name="Способ оплаты")
+
+    def __str__(self):
+        return f'{self.paid_course if self.paid_course else self.paid_lesson} - {self.payment_amount}'
+
+    class Meta:
+        verbose_name = "платеж"
+        verbose_name_plural = "платежи"
+        ordering = ('date_payment',)
+
