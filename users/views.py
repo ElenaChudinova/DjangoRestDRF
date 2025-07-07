@@ -1,8 +1,7 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from users.filters import PaymentFilter
 from users.models import Payment, User
 from users.serializers import PaymentSerializer, UserSerializer
 
@@ -15,8 +14,9 @@ class UserViewSet(ModelViewSet):
 class PaymentListAPIView(ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    filter_backends = [DjangoFilterBackend]
-    filter_class = PaymentFilter
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ("date_payment", "payment_method",)
+
 
 class PaymentCreateAPIView(CreateAPIView):
     queryset = Payment.objects.all()

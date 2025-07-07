@@ -60,7 +60,6 @@ class Payment(models.Model):
 
     email = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date_payment = models.DateTimeField(editable=False,
-        auto_now_add=True,
         verbose_name="Дата оплаты",
         null=True,
         blank=True,)

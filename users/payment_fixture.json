@@ -12,26 +12,14 @@
     }
   },
   {
-    "model": "users.payment",
-    "pk": 1,
+     "model": "users.payment",
+    "pk": 3,
     "fields": {
       "email": 2,
-      "date_payment": "2025-02-01",
+      "date_payment": "2024-05-01",
       "paid_course": 2,
       "paid_lesson": null,
-      "payment_amount": 120000,
-      "payment_method": "ПЕРЕВОД НА СЧЕТ"
-    }
-  },
-  {
-    "model": "users.payment",
-    "pk": 1,
-    "fields": {
-      "email": 1,
-      "date_payment": "2024-05-01",
-      "paid_course": null,
-      "paid_lesson": 2,
-      "payment_amount": 2000,
+      "payment_amount": 80000,
       "payment_method": "НАЛИЧНЫЕ"
     }
   }
