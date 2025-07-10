@@ -52,9 +52,10 @@ class Lesson(models.Model):
         verbose_name="Ссылка на видео",
         help_text="Загрузите видео",
     )
-    course = models.ForeignKey(
+    courses = models.ForeignKey(
         Course,
         on_delete=models.PROTECT,
+        related_name= "courses",
         verbose_name="Курс",
         blank=True,
         null=True,
