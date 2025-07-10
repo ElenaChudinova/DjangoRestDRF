@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
-from rest_framework import serializers
 
 from materials.models import Course, Lesson
 

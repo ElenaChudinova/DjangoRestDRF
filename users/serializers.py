@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework_simplejwt import serializers
 
 from users.models import Payment, User
 
