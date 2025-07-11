@@ -1,13 +1,23 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from rest_framework_simplejwt import serializers
+from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
-from users.models import Payment, User
+from users.models import Payment
 
 
-class UserSerializer(ModelSerializer):
+User = get_user_model()
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ("email", "password", "phone", "city", "avatar")
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            email=validated_data["email"],
+            password=validated_data["password"]
+        )
+        return user
 
 
 class PaymentSerializer(ModelSerializer):
