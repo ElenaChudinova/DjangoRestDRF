@@ -2,6 +2,7 @@ from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
 from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 
 from materials.models import Course, Lesson
 from materials.serializers import (CourseSerializer,
@@ -10,7 +11,6 @@ from materials.serializers import (CourseSerializer,
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
-    filterset_fields = ('courses',)
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -26,6 +26,8 @@ class LessonCreateAPIView(CreateAPIView):
 class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('lesson', 'course')
 
 class LessonRetrieveAPIView(RetrieveAPIView):
     queryset = Lesson.objects.all()
