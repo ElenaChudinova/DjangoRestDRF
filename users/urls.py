@@ -14,10 +14,11 @@ from rest_framework_simplejwt.views import (
 app_name = UsersConfig.name
 
 router = SimpleRouter()
-router.register("", UserViewSet)
+router.register(r"users", UserViewSet)
 
 
 urlpatterns = [
+    path('', include(router.urls)),
     path("payment/", PaymentListAPIView.as_view(), name="payment_list"),
     path("payment/<int:pk>/", PaymentRetrieveAPIView.as_view(), name="payment_retrieve"),
     path("payment/create/", PaymentCreateAPIView.as_view(), name="payment_create"),
@@ -27,5 +28,3 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', UserCreateAPIView.as_view(), name='register'),
 ]
-
-urlpatterns += router.urls
