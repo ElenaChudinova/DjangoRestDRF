@@ -1,10 +1,9 @@
 from django.db import models
+from users.models import User
 
 
 class Course(models.Model):
-    id = models.AutoField(
-        auto_created=True, primary_key=True, verbose_name="ID Курса"
-    )
+    id = models.AutoField(auto_created=True, primary_key=True, verbose_name="ID Курса")
     name = models.CharField(
         max_length=150,
         verbose_name="Название курса",
@@ -22,6 +21,14 @@ class Course(models.Model):
         null=True,
         verbose_name="Картинка",
         help_text="Загрузите картинку",
+    )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Студент",
+        help_text="Укажите студента курса",
     )
 
     class Meta:
@@ -58,10 +65,18 @@ class Lesson(models.Model):
     courses = models.ForeignKey(
         Course,
         on_delete=models.PROTECT,
-        related_name= "courses",
+        related_name="courses",
         verbose_name="Курс",
         blank=True,
         null=True,
+    )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Студент",
+        help_text="Укажите студента урока",
     )
 
     class Meta:
