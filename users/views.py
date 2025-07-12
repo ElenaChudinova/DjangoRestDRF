@@ -11,21 +11,21 @@ from users.models import Payment, User
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Разрешение по умолчанию для всех методов
-
-    def get_permissions(self):
-        """
-        Возвращает список классов разрешений для текущего действия.
-        """
-        if self.action == 'list' or self.action == 'retrieve':
-            # Для методов list и retrieve (GET) применяется IsAuthenticated
-            return [permissions.IsAuthenticated()]
-        elif self.action == 'create':
-            # Для метода create (POST) применяется IsAuthenticated
-            return [permissions.IsAuthenticated()]
-        else:
-            # Для остальных действий (например, пользовательские действия)
-            return [permissions.IsAuthenticated()]
+    # permission_classes = [permissions.IsAuthenticated]  # Разрешение по умолчанию для всех методов
+    #
+    # def get_permissions(self):
+    #     """
+    #     Возвращает список классов разрешений для текущего действия.
+    #     """
+    #     if self.action == 'list' or self.action == 'retrieve':
+    #         # Для методов list и retrieve (GET) применяется IsAuthenticated
+    #         return [permissions.IsAuthenticated()]
+    #     elif self.action == 'create':
+    #         # Для метода create (POST) применяется IsAuthenticated
+    #         return [permissions.IsAuthenticated()]
+    #     else:
+    #         # Для остальных действий (например, пользовательские действия)
+    #         return [permissions.IsAuthenticated()]
 
 
 class UserCreateAPIView(CreateAPIView):
