@@ -1,7 +1,6 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 from django.urls import include
-
 from users.apps import UsersConfig
 
 from users.views import UserViewSet, UserCreateAPIView, PaymentListAPIView, PaymentRetrieveAPIView, PaymentCreateAPIView, \
