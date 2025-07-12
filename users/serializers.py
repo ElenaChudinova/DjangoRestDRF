@@ -1,28 +1,25 @@
-from rest_framework.serializers import ModelSerializer
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
-from users.models import Payment
+from users.models import Payment, User
 
-
-User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "email", "password")
+        fields = ("id", "email", "password", "phone", "city", "avatar")
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data["username"],
-            email=validated_data["email"],
-            password=validated_data["password"],
-        )
-        return user
+    # def create(self, validated_data):
+    #     user = User.objects.create_user(
+    #
+    #         email=validated_data["email"],
+    #         password=validated_data["password"],
+    #     )
+    #     return user
 
 
 class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
-

@@ -6,8 +6,8 @@ from materials.models import Course, Lesson
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(max_length=50,
-        unique=True, verbose_name="Почта", help_text="Укажите почту"
+    email = models.EmailField(
+        max_length=50, unique=True, verbose_name="Почта", help_text="Укажите почту"
     )
     phone = models.CharField(
         max_length=40,
@@ -48,7 +48,6 @@ class User(AbstractUser):
         return self.email
 
 
-
 class Payment(models.Model):
     CASH = "НАЛИЧНЫЕ"
     BANK_TRANSFER = "ПЕРЕВОД НА СЧЕТ"
@@ -58,20 +57,30 @@ class Payment(models.Model):
     )
 
     email = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    date_payment = models.DateTimeField(editable=False,
+    date_payment = models.DateTimeField(
+        editable=False,
         verbose_name="Дата оплаты",
         null=True,
-        blank=True,)
-    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True)
+        blank=True,
+    )
+    paid_course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, null=True, blank=True
+    )
+    paid_lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE, null=True, blank=True
+    )
     payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
-    payment_method = models.CharField(max_length=15, choices=PAYMENT_METHOD, default=CASH, verbose_name="Способ оплаты")
+    payment_method = models.CharField(
+        max_length=15,
+        choices=PAYMENT_METHOD,
+        default=CASH,
+        verbose_name="Способ оплаты",
+    )
 
     def __str__(self):
-        return f'{self.paid_course if self.paid_course else self.paid_lesson} - {self.payment_amount}'
+        return f"{self.paid_course if self.paid_course else self.paid_lesson} - {self.payment_amount}"
 
     class Meta:
         verbose_name = "платеж"
         verbose_name_plural = "платежи"
-        ordering = ('date_payment',)
-
+        ordering = ("date_payment",)
