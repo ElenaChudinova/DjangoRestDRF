@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+import users
 
 
 class Course(models.Model):
@@ -23,7 +23,7 @@ class Course(models.Model):
         help_text="Загрузите картинку",
     )
     owner = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -71,7 +71,7 @@ class Lesson(models.Model):
         null=True,
     )
     owner = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
