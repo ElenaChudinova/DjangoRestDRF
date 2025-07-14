@@ -55,7 +55,7 @@ class Lesson(models.Model):
         verbose_name="Фото",
         help_text="Загрузите картинку",
     )
-    video = models.CharField(
+    video = models.URLField(
         max_length=100,
         blank=True,
         null=True,
