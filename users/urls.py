@@ -8,7 +8,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 from users.apps import UsersConfig
 from users.views import (PaymentCreateAPIView, PaymentDestroyAPIView,
                          PaymentListAPIView, PaymentRetrieveAPIView,
-                         PaymentUpdateAPIView, UserCreateAPIView, UserViewSet)
+                         PaymentUpdateAPIView, UserCreateAPIView, UserViewSet
+                        )
 
 app_name = UsersConfig.name
 
@@ -44,4 +45,5 @@ urlpatterns = [
         name="token_refresh",
     ),
     path("register/", UserCreateAPIView.as_view(), name="register"),
+
 ]

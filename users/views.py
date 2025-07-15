@@ -1,12 +1,16 @@
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from users.models import Payment, User
+from materials.models import Course
+from users.models import Payment, User, Subscription
 
 from .serializers import PaymentSerializer, UserSerializer
 
@@ -31,13 +35,18 @@ class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
-class UsertUpdateAPIView(UpdateAPIView):
+
+class UserUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class UsertDestroyAPIView(DestroyAPIView):
+class UserDestroyAPIView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 

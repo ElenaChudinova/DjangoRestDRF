@@ -1,3 +1,5 @@
+from tkinter.constants import CASCADE
+
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 
@@ -84,3 +86,33 @@ class Payment(models.Model):
         verbose_name = "платеж"
         verbose_name_plural = "платежи"
         ordering = ("date_payment",)
+
+
+class Subscription(models.Model):
+    sub_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="sub_user",
+        null=True,
+        blank=True,
+    )
+    sub_course = models.ForeignKey(
+        "materials.Course",
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        related_name="sub_course",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{self.sub_user, self.sub_course}"
+
+    class Meta:
+        verbose_name = "подписка"
+        verbose_name_plural = "подписки"
+        unique_together = (
+            "sub_user",
+            "sub_course",
+        )
