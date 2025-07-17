@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django_filters import rest_framework as filters
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
@@ -8,9 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import SearchFilter
 
 from materials.models import Course, Lesson
+from materials.paginators import CustomPagination
 from materials.serializers import (CourseDetailSerializer, CourseSerializer,
                                    LessonSerializer, SubscriptionSerializer)
 from users.models import Subscription
@@ -20,6 +19,7 @@ from users.permissions import IsModer, IsOwner
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -58,12 +58,11 @@ class LessonCreateAPIView(CreateAPIView):
 class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    # filterset_fields = ("lesson",)
     permission_classes = (
         IsAuthenticated,
         IsModer | IsOwner,
     )
+    pagination_class = CustomPagination
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
@@ -100,8 +99,7 @@ class SubscriptionAPIView(APIView):
     def post(self, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course")
-        course_item = get_object_or_404(Course, pk=course_id)
-
+        course_item = get_object_or_404(Course, id=course_id)
         subs_item = Subscription.objects.filter(user=user, course=course_item)
 
         # Если подписка у пользователя на этот курс есть - удаляем ее
