@@ -1,7 +1,6 @@
-from tkinter.constants import CASCADE
-
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from datetime import datetime, timedelta
 
 from materials.models import Course, Lesson
 
@@ -32,6 +31,13 @@ class User(AbstractUser):
         verbose_name="Аватар",
         help_text="Загрузите аватар",
     )
+    last_login = models.DateTimeField(
+        default=datetime.now,
+        verbose_name="Дата последнего посещения",
+        null=True,
+        blank=True,
+    )
+    is_active = models.BooleanField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -65,7 +71,9 @@ class Payment(models.Model):
         help_text="Укажите ID сессии",
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True, related_name="payments"
+    )
     date_payment = models.DateTimeField(
         editable=False,
         verbose_name="Дата оплаты",
@@ -126,7 +134,3 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = "подписка"
         verbose_name_plural = "подписки"
-        unique_together = (
-            "sub_user",
-            "sub_course",
-        )

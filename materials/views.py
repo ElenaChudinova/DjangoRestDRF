@@ -1,3 +1,4 @@
+from django.contrib.admin import action
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import (
     CreateAPIView,
@@ -11,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from rest_framework.viewsets import ModelViewSet
+from yaml import serialize
 
 from materials.models import Course, Lesson
 from materials.paginators import CustomPagination
@@ -20,6 +22,7 @@ from materials.serializers import (
     LessonSerializer,
     SubscriptionSerializer,
 )
+from materials.tasks import send_inform_about_update_course
 from users.models import Subscription
 from users.permissions import IsModer, IsOwner
 
@@ -46,6 +49,17 @@ class CourseViewSet(ModelViewSet):
         elif self.action in "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    @action
+    def update(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        if course.update.filter(pk=request.user.pk).exists():
+            course.update.remove(request.user)
+        else:
+            course.update.add(request.user)
+            send_inform_about_update_course.delay(course.owner.email)
+        serializer = self.get_serializer(course)
+        return Response(data=serializer.data)
 
 
 class LessonCreateAPIView(CreateAPIView):

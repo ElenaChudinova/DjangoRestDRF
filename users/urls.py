@@ -47,5 +47,5 @@ urlpatterns = [
         TokenRefreshView.as_view(permission_classes=(AllowAny,)),
         name="token_refresh",
     ),
-    path("register/", UserCreateAPIView.as_view(), name="register")
+    path("register/", UserCreateAPIView.as_view(), name="register"),
 ]
