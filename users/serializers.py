@@ -10,10 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    course_name = serializers.SerializerMethodField()
+
+    def get_course_name(self, obj):
+        return obj.courses.name
+
     class Meta:
         model = Payment
         fields = "__all__"
-
-
-
-
