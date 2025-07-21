@@ -57,8 +57,15 @@ class Payment(models.Model):
         (CASH, "НАЛИЧНЫЕ"),
         (BANK_TRANSFER, "ПЕРЕВОД НА СЧЕТ"),
     )
+    session_id = models.CharField(
+        max_length=300,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии",
+        help_text="Укажите ID сессии",
+    )
 
-    email = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
     date_payment = models.DateTimeField(
         editable=False,
         verbose_name="Дата оплаты",
@@ -77,6 +84,13 @@ class Payment(models.Model):
         choices=PAYMENT_METHOD,
         default=CASH,
         verbose_name="Способ оплаты",
+    )
+    link = models.URLField(
+        max_length=400,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
     )
 
     def __str__(self):
