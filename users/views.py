@@ -20,8 +20,8 @@ from .serializers import PaymentSerializer, UserSerializer
 from .services import (
     convert_rub_to_dollars,
     create_stripe_price,
-
-    create_stripe_session, create_stripe_course,
+    create_stripe_session,
+    create_stripe_course,
 )
 
 

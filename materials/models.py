@@ -1,6 +1,5 @@
 from django.db import models
-
-import users
+from datetime import datetime, timedelta
 
 
 class Course(models.Model):
@@ -30,6 +29,12 @@ class Course(models.Model):
         blank=True,
         verbose_name="Студент",
         help_text="Укажите студента курса",
+    )
+    update = models.DateTimeField(
+        default=datetime.now,
+        verbose_name="Время обновления курса",
+        null=True,
+        blank=True,
     )
 
     class Meta:
