@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from materials.models import Lesson, Course
-from users.models import User
+from users.models import User, Subscription
 
 
 class LessonTestCase(APITestCase):
@@ -71,22 +71,22 @@ class LessonTestCase(APITestCase):
         self.assertEqual(data, result)
 
 
-class SubscriptionTest(APITestCase):
+class SubscriptionTestCase(APITestCase):
     """Тест для работы с подписками."""
 
     def setUp(self):
-        self.user = User.objects.create(email="admin@sky.pro")
-        self.course = Course.objects.create(name="Tests Tests курс")
+        self.user = User.objects.create(email="stasoff@gmail.com")
+        self.course = Course.objects.create(name="Python-программирование")
+        self.subscription = Subscription.objects.create(sub_course=self.course, sub_user=self.user)
         self.client.force_authenticate(user=self.user)
 
     def test_sub(self):
         url = reverse("materials:sub")
         data = {
-            "user": self.user.pk,
-            "id": self.course.pk,
+            "sub_user": self.user.pk,
+            "sub_course": self.course.pk,
         }
         response = self.client.post(url, data=data)
-        print(response.json())
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["message"], "Подписка добавлена")
+        self.assertEqual(response.data.get("message"), "подписка удалена")
