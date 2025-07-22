@@ -120,7 +120,7 @@ class SubscriptionAPIView(APIView):
         user = self.request.user
         course_id = self.request.data.get("sub_course")
         course_item = get_object_or_404(Course, id=course_id)
-        subs_item = Subscription.objects.filter(user=user, course=course_item)
+        subs_item = Subscription.objects.filter(sub_user=user, sub_course=course_item)
 
         # Если подписка у пользователя на этот курс есть - удаляем ее
         if subs_item.exists():
@@ -128,7 +128,7 @@ class SubscriptionAPIView(APIView):
             message = "подписка удалена"
         # Если подписки у пользователя на этот курс нет - создаем ее
         else:
-            Subscription.objects.create(user=user, course=course_item)
+            Subscription.objects.create(sub_user=user, sub_course=course_item)
             message = "подписка добавлена"
         # Возвращаем ответ в API
         return Response({"message": message})

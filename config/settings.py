@@ -179,8 +179,8 @@ CELERY_RESULT_BACKEND = os.getenv(("CELERY_RESULT_BACKEND"))
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
-CELERY_BEAT_SCHEDULE= {
-    "is_active_login":{
+CELERY_BEAT_SCHEDULE = {
+    "is_active_login": {
         "task": "materials.tasks.is_active_login",
         "schedule": timedelta(days=1),
     }
