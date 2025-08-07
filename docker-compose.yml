@@ -1,32 +1,45 @@
 version: '3.9'
 
 services:
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - .static_volume:/app/staticfile
+    depends_on:
+      - web
   wed:
     build: .
-    command: python3 manage.py runserver 0.0.0.0.8000
+    command: sh -c "python3 manage.py collectstatic --noinput && gunicorn config.wsgi:aplication --bind 0.0.0.0.8000"
     volumes:
-      - .:/code
-      - static_volume:/code/static
-    ports:
-      - "5432:5432"
+      - .:/app
+      - static_volume:/app/static
+    expose:
+      - "8000"
     depends_on:
-      db:
-        condition: service_healthy
-  db:
-    image: postgres:17.0
+      - db
+      - redis
     env_file:
-      - .env
-    volumes:
-      - postgres/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      - ./.env
 
-networks:
-  default:
+  db:
+    image: postgres:16
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+redis:
+  image: redis:7
+  volimes:
+    - redis_data:/data
+  env_file:
+    - ./.env
 
 volumes:
   postgres_data:
   static_volume:
+  redis_data:
